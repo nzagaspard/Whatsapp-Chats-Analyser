@@ -33,9 +33,9 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 #st.markdown("<footer style='text-align: center; color: red;'>Some title</footer>", unsafe_allow_html=True)
     
 def main():
-    photo = "C:\\DataScience\\Dashboards\\Whatsapp Chat Analyzer.jpg"
-    image = Image.open(photo)
-    st.image(image)
+    #photo = "C:\\DataScience\\Dashboards\\Whatsapp Chat Analyzer.jpg"
+    #image = Image.open(photo)
+    st.write('# Whatsapp Chats Analyser')
     
     data = loading_data()    
     
