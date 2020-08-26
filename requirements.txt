@@ -1,0 +1,11 @@
+wordcloud==1.7.0
+streamlit==0.63.1
+plotly==4.8.2
+plotly-express==0.4.1
+pandas==0.23.4
+numpy==1.19.0
+matplotlib==3.1.1
+Faker==4.1.2
+emoji==0.5.4
+re==2.2.1
+PIL==7.2.0
