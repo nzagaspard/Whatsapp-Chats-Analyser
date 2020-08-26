@@ -7,4 +7,3 @@ numpy==1.19.0
 matplotlib==3.1.1
 Faker==4.1.2
 emoji==0.5.4
-PIL==7.2.0
