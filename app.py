@@ -31,7 +31,15 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 #st.markdown("<footer style='text-align: center; color: red;'>Some title</footer>", unsafe_allow_html=True)
-    
+description = """WhatsApp has found many use cases beyond keeping us in touch such as marketing & customer support, education & research, ... 
+This application analyses WhatsApp chats (a group chat or two-way conversation) and shows time series trends, most active hours/days/people, most common used words, emojis, ...
+
+**To export a particular chat** 
+
+1. Open the individual or group chat.
+2. Tap on 3 vertical dots in top right corner > More > Export chat.
+3. Choose export without media (this gives you around 40000 last messages) and where to store/send the exported chat file."""
+st.set_option('deprecation.showfileUploaderEncoding', False)   
 def main():
     #photo = "C:\\DataScience\\Dashboards\\Whatsapp Chat Analyzer.jpg"
     #image = Image.open(photo)
@@ -39,19 +47,17 @@ def main():
     
     data = loading_data()    
     
-    if data:
-        messages_df, emojis_df = clean_data(data)
+    if data is not None:
         
         if use_file == 'Default':
-            Faker.seed(1)
-            fake = Faker()
-            names_map = {}
-            unique_names = messages_df['Sender'].unique()
-            for i in range(len(unique_names)):
-                names_map[unique_names[i]] = fake.name()
-            messages_df['Sender'] = messages_df['Sender'].replace(names_map)
+            messages_df = data
+            messages_df.sort_values(by='Date', inplace=True)
+            all_emojis = list([a for b in messages_df['Emojis'] for a in b])
+            emojis = dict(Counter(all_emojis))
+            emojis_df = pd.DataFrame({'Emoji': list(emojis.keys()), 'Total': list(emojis.values())})
+            messages_df['Date'] = messages_df['Date'].astype('datetime64[ns]')
         else:
-            messages_df = messages_df
+            messages_df, emojis_df = clean_data(data)
         
         media_messages = messages_df[messages_df['Message'] == '<Media omitted>']
         deleted_messages = messages_df[messages_df['Message'] == 'This message was deleted']
@@ -65,8 +71,6 @@ def main():
         ed = messages_df['Date'].max()
 
         if stats == '':
-#             st.write('## Sample File')
-#             st.write(data[:5])
             st.write('## Cleaned Dataframe')
             st.write(messages_df)
         
@@ -249,25 +253,23 @@ def main():
 #     st.write('Data Analyst | Data Scientist | Data Engineer')
     st.info("""Info/Feedback: nzagaspard@gmail.com | +250722882193 (Whatsapp)""")
 
-@st.cache(suppress_st_warning=True)   
+#@st.cache(suppress_st_warning=True)   
 def loading_data():
-    
     if stats == '':
-        st.write('This project analyses WhatsApp chats (two-way conversation or a group chat) and shows time series trends, most common used words, emojis, ...')
-        
+        st.write(description)
+    
     if use_file == 'Default':
-        with open('C:\\Users\\gnzasabimfura\\Downloads\\savoir.txt', encoding="utf-8") as file:
-            return file.readlines()   
+        d = pd.read_csv('https://raw.githubusercontent.com/nzagaspard/Datasets3/master/Whatsapp%20Chats%20Samples.csv',encoding='utf-8')
+        return d   
     else:
         st.write('Sometimes when no file uploaded the commands are run on the recent uploaded file', color = 'red')
-        file = st.file_uploader('Drop or Browse the extracted chat file (.txt)', encoding= 'utf-8', type = 'txt', key = 0)
+        file = st.file_uploader('Drop or Browse the extracted chat file (.txt)', encoding= 'utf-8', type = 'txt')
         
         if file:
             return file.readlines()
         else:
             st.write('## Upload File!')
     
-
 def clean_data(raw_messages):  
     #Combining Rows
     combined_rows = []
@@ -326,7 +328,6 @@ def clean_data(raw_messages):
     emojis_df = pd.DataFrame({'Emoji': list(emojis.keys()), 'Total': list(emojis.values())})      
     
     return messages_df, emojis_df
-
 
 if __name__ == '__main__':
     main()
