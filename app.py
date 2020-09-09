@@ -39,7 +39,7 @@ This application analyses WhatsApp chats (a group chat or two-way conversation) 
 1. Open the individual or group chat.
 2. Tap on 3 vertical dots in top right corner > More > Export chat.
 3. Choose export without media (this gives you around 40000 last messages) and where to store/send the exported chat file."""
-st.set_option('deprecation.showfileUploaderEncoding', False)   
+#st.set_option('deprecation.showfileUploaderEncoding', False)   
 def main():
     #photo = "C:\\DataScience\\Dashboards\\Whatsapp Chat Analyzer.jpg"
     #image = Image.open(photo)
