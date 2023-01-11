@@ -71,8 +71,9 @@ def main():
         ed = messages_df['Date'].max()
 
         if stats == '':
-            st.write('## Cleaned Dataframe')
-            st.write(messages_df)
+#             st.write('## Cleaned Dataframe')
+#             st.write(messages_df)
+            st.write('## Select the Analysis on the left sidebar!')
         
         if stats == 'Overall Summary':
                         
